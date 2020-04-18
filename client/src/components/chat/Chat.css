@@ -1,0 +1,42 @@
+#chat {
+  height: 100%;
+  width: 300px;
+  background-color: #444;
+  color: white;
+
+  border-right: 2px solid #000;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-messages {
+  height: 100%;
+}
+
+.message {
+  padding: .25rem 1rem;
+
+  border-bottom: 1px solid #eee;
+  border-left: 3px solid gold;
+}
+
+.message .meta {
+  font-size: .75rem;
+}
+
+.message .text {
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+#chat-form {
+  margin: auto;
+  padding: .5rem;
+}
+
+#chat-form input {
+  background-color: #444;
+  border: none;
+  font-size: 1rem;
+}
