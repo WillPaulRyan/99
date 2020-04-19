@@ -20,11 +20,11 @@ if(process.env.NODE_ENV === 'production') {
   })
 }
 
-const botName = 'ChatCord Bot';
+const botName = 'server';
 
 // Run when client connects
 io.on('connection', socket => {
-  console.log('New client connected')
+  // console.log('New client connected')
 
   // 3 ways to emit messages:
   // socket.emit()  <- only goes to user
@@ -32,7 +32,7 @@ io.on('connection', socket => {
   // io.emit()  <- goes to everyone
 
   socket.on('joinRoom', () => {
-    console.log('room joined')
+    // console.log('room joined')
   })
 
   // Listen for chatMessage
@@ -44,7 +44,7 @@ io.on('connection', socket => {
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
-    console.log('Client disconnected')
+    // console.log('Client disconnected')
   });
 });
 
