@@ -31,14 +31,21 @@ io.on('connection', socket => {
   // socket.broadcast.emit()  <- goes to everyone except user
   // io.emit()  <- goes to everyone
 
-  socket.on('joinRoom', () => {
+  socket.on('joinRoom', ({username, room}) => {
     // console.log('room joined')
+    const user = userJoin(socket.id, username, room);
+
+    socket.join(user.room);
   })
 
   // Listen for chatMessage
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-    io.emit('message', msg)
+    // console.log(user)
+    // console.log(user.room)
+    io.to(user.room).emit('message', formatMessage(user.username, msg))
+    // io.emit('message', formatMessage(user.username, msg))
+    // io.emit('message', msg)
   })
   
 
