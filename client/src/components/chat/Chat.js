@@ -1,29 +1,22 @@
 import React from "react";
-// eslint-disable-next-line
-import socketio from 'socket.io-client';
-
 import './Chat.css'
 
 export default class Chat extends React.Component {
   state = {
-    messages: [
-      {user: 'Alice', msg: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, repudiandae."},
-      {user: 'Bob', msg: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, repudiandae."}
-    ]
+    messages: []
   }
 
   componentDidMount() {
     const chatMessages = document.getElementById('chat-messages');
 
-    this.props.socket.emit('joinRoom')
-
     // Message from server
     this.props.socket.on('message', message => {
-      console.log(message)
+      // console.log(message)
       this.setState((state) => ({
-        messages: [...state.messages, {user: 'USER', msg: message}]
+        messages: [...state.messages, message]
       }));
 
+    // console.log(this.state.messages)
     // Scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
     })
@@ -49,8 +42,8 @@ export default class Chat extends React.Component {
     const messages = this.state.messages.map((message, i) => {
       return (
         <div className="message" key={i}>
-          <p className="meta">{message.user}</p>
-          <p className="text">{message.msg}</p>
+          <p className="meta">{message.username}</p>
+          <p className="text">{message.text}</p>
         </div>
       )
     });

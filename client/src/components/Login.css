@@ -1,4 +1,4 @@
-#app {
+#index {
 	height: 100vh;
 	width: 100vw;
 
@@ -7,4 +7,61 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+#login-container {
+	border: 2px solid black;
+	border-radius: 1rem;
+	overflow: hidden;
+
+	background-color: #ddd;
+}
+
+#login-container header {
+	padding: 1rem 2rem;
+	background-color: lightseagreen;
+}
+
+#login-container p {
+	font-size: 1.2rem;
+}
+
+#login-container main {
+	padding: 2rem 2rem;
+}
+
+#login-container label {
+	margin-right: 1rem;
+	font-size: 1.2rem;
+}
+
+#login-container .form-control {
+	margin-bottom: .5rem;
+}
+
+#login-container input[type='text'] {
+	width: 9rem;
+	font-size: 1rem;
+	padding: .2rem;
+	border: 1px solid lightseagreen;
+
+}
+
+#login-container select {
+	font-size: 1rem;
+	border: 1px solid lightseagreen;
+}
+
+#login-container button {
+	margin-top: .5rem;
+	font-size: 1rem;
+	padding: .4rem;
+	border: 1px solid lightseagreen;
+	border-radius: .5rem;
+	cursor: pointer;
+}
+
+#login-container button:hover,
+#login-container button:focus {
+	background-color: lightseagreen;
 }

@@ -1,9 +1,23 @@
-#game {
+#game-container {
   height: 100%;
   width: 100%;
   background-color: forestgreen;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#game {
+  display: grid;
+
+  text-align: center;
+}
+
+.card { /* original size = 720px x 500px */
+  height: 108px;
+  width: 75px;
+  
+  cursor: pointer;
 }
