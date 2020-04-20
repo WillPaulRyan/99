@@ -4,6 +4,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+const { newGame, deal } = require('./utils/game')
 
 const app = express();
 const server = http.createServer(app);
@@ -32,7 +33,6 @@ io.on('connection', socket => {
   // io.emit()  <- goes to everyone
 
   socket.on('joinRoom', ({username, room}) => {
-    // console.log('room joined')
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
@@ -41,11 +41,18 @@ io.on('connection', socket => {
   // Listen for chatMessage
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-    // console.log(user)
-    // console.log(user.room)
     io.to(user.room).emit('message', formatMessage(user.username, msg))
-    // io.emit('message', formatMessage(user.username, msg))
-    // io.emit('message', msg)
+  })
+
+  // Listen for new game
+  socket.on('newGameReq', () => {
+    const user = getCurrentUser(socket.id);
+    newGame(io, user)
+  })
+
+  // Listen for client request for a card
+  socket.on('dealReq', () => {
+    deal(socket)
   })
   
 

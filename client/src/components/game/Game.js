@@ -1,28 +1,41 @@
 import React from "react";
-import {Deck} from '../Deck';
 import './Game.css'
 
 export default class Game extends React.Component {
   state = {
-    count: 0
+    count: 0,
+    hand: []
   }
 
-  handlePlay = (value) => {
+  componentDidMount() {
+    this.props.socket.emit('newGameReq')
+    
+    this.props.socket.on('deal', card => {
+      this.setState((state) => ({
+        hand: [...state.hand, card]
+      }))
+
+      // console.log(this.state.hand)
+    })
+  }
+
+  handlePlay = (card) => {
+    this.props.socket.emit('dealReq')
     // console.log(value)
     this.setState((state) => ({
-      count: state.count + value
+      count: state.count + card.value,
+      hand: state.hand.filter(word => word.id != card.id)
     }));
 }
 
   render() {
-    const deck = Deck.map((card, i) => {
+    const hand = this.state.hand.map((card, i) => {
       return (
         <img className="card"
           key={i}
           src={card.img}
           alt=''
-          value={2}
-          onClick={() => this.handlePlay(card.value)}
+          onClick={() => this.handlePlay(card)}
         />
       )
     })
@@ -30,8 +43,8 @@ export default class Game extends React.Component {
     return (
       <div id="game-container">
         <div id="game">
-          <div id="deck">
-            {deck}
+          <div id="hand">
+            {hand}
           </div>
           <h2>{this.state.count}</h2>
         </div>
