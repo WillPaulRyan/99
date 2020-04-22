@@ -1,5 +1,6 @@
 const socketio = require('socket.io');
 const {Deck} = require('./Deck');
+const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./users');
 
 let deck = Deck
 
@@ -8,8 +9,9 @@ shuffleDeck(deck)
 function newGame(io, user) {
   let deck = Deck
   shuffleDeck(deck)
+  console.log(getRoomUsers(user))
 
-  io.emit('message', {username: 'server', text: 'new game'})
+  // io.emit('message', {username: 'server', text: 'new game'})
 }
 
 function deal(socket) {
