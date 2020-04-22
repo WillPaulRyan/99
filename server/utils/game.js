@@ -1,15 +1,18 @@
 const socketio = require('socket.io');
 const {Deck} = require('./Deck');
 
-let deck = Deck
+function reset() {
+	deck = [...Deck]
+	shuffleDeck(deck);
+}
 
-shuffleDeck(deck)
-
-function newGame(io, user) {
-  let deck = Deck
-  shuffleDeck(deck)
+function newGame(io, socket, user) {
+  reset();
+  
+  let hand = deck.splice(0, 4);
 
   io.emit('message', {username: 'server', text: 'new game'})
+  socket.emit('newGame', hand);
 }
 
 function deal(socket) {

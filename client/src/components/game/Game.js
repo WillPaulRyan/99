@@ -10,6 +10,13 @@ export default class Game extends React.Component {
   componentDidMount() {
     this.props.socket.emit('newGameReq')
     
+    this.props.socket.on('newGame', hand => {
+			console.log(hand);
+			this.setState((state) => ({
+        hand: [...state.hand, ...hand]
+			}))
+		})
+    
     this.props.socket.on('deal', card => {
       this.setState((state) => ({
         hand: [...state.hand, card]
@@ -22,9 +29,10 @@ export default class Game extends React.Component {
   handlePlay = (card) => {
     this.props.socket.emit('dealReq')
     // console.log(value)
+        
     this.setState((state) => ({
       count: state.count + card.value,
-      hand: state.hand.filter(word => word.id != card.id)
+      hand: state.hand.filter(word => word.id !== card.id)
     }));
 }
 
@@ -43,11 +51,11 @@ export default class Game extends React.Component {
     return (
       <div id="game-container">
         <div id="game">
-          <div id="hand">
-            {hand}
-          </div>
           <h2>{this.state.count}</h2>
         </div>
+				<div id="hand">
+					{hand}
+				</div>
       </div>
     )
   }

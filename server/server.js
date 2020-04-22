@@ -47,7 +47,7 @@ io.on('connection', socket => {
   // Listen for new game
   socket.on('newGameReq', () => {
     const user = getCurrentUser(socket.id);
-    newGame(io, user)
+    newGame(io, socket, user)
   })
 
   // Listen for client request for a card
