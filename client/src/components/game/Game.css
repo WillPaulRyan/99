@@ -24,6 +24,33 @@
   text-align: center;
 }
 
+#users-container {
+	display: flex;
+}
+
+.user {
+	margin: 2rem;
+}
+
+#current-user {
+	font-weight: 700;
+}
+
+#game-state {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.card { /* original size = 720px x 500px */
+  height: 108px;
+  width: 75px;
+}
+
+#count {
+	margin: 1rem;
+}
+
 #hand {
 	/* margin-top: auto; */
 	margin-bottom: 1rem;
@@ -33,15 +60,12 @@
 }
 
 
-.card { /* original size = 720px x 500px */
-  height: 108px;
-  width: 75px;
+#hand .card {
   margin-right: .5rem;
-  
   cursor: pointer;
 }
 
-.card:last-child {
+#hand .card:last-child {
 	margin-right: 0;
 }
 

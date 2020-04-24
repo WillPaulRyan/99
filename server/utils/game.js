@@ -9,11 +9,13 @@ function reset() {
 
 function newGame(io, socket, user) {
   reset();
-  
-  let hand = deck.splice(0, 4);
-
-  io.emit('message', {username: 'server', text: 'new game'})
-  socket.emit('newGame', hand);
+  console.log(`New game in room ${user.room}`);
+    
+  // Get users in room & to each user...
+  getRoomUsers(user.room).forEach((user) => {
+		// ... emit 4 cards spliced from deck  
+		io.to(user.id).emit('newGame', deck.splice(0,4)); 
+	});  
 }
 
 function deal(socket) {
@@ -26,6 +28,10 @@ function deal(socket) {
   }
 }
 
+function play(io, user, card) {
+	io.to(user.room).emit('turnPlayed', ({ user, card }));
+}
+
 function shuffleDeck(deck) {
   for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -35,5 +41,6 @@ function shuffleDeck(deck) {
 
 module.exports = {
   deal,
-  newGame
+  newGame,
+  play
 };

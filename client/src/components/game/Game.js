@@ -3,17 +3,25 @@ import './Game.css'
 
 export default class Game extends React.Component {
   state = {
+		currentUser: 0,
     count: 0,
-    hand: []
+    hand: [],
+    users: [],
+    discard: {img: ''}
   }
 
   componentDidMount() {
     this.props.socket.emit('newGameReq')
     
+    this.props.socket.on('currentUser', currentUser => {
+			this.setState({currentUser});
+		});
+    
     this.props.socket.on('newGame', hand => {
-			// console.log(hand);
+			console.log("New game");
 			this.setState((state) => ({
-        hand: [...hand]
+				count: 0,
+        hand
 			}))
 		})
     
@@ -24,24 +32,42 @@ export default class Game extends React.Component {
 
       // console.log(this.state.hand)
     })
+    
+    this.props.socket.on('turnPlayed', ({ user, card }) => {
+			// console.log(card);
+			
+			this.setState((state) => ({
+				count: state.count + card.value,
+				discard: card
+			}));
+		});
 
     this.props.socket.on('roomUsers', ({ room, users }) => {
-      // console.log(room)
-      console.log(users)
+      this.setState({users});
     })
   }
 
   handlePlay = (card) => {
-    this.props.socket.emit('dealReq')
+    this.props.socket.emit('play', card)
     // console.log(value)
-        
+
     this.setState((state) => ({
-      count: state.count + card.value,
       hand: state.hand.filter(word => word.id !== card.id)
     }));
-}
+	}
 
   render() {
+		const currentUser = this.state.currentUser
+		const users = this.state.users
+			// .filter(user => user.id !== this.state.currentUser.id)
+			.map((user, i) => {
+			return (
+				<div className="user" key={i}>
+					<p id={user.id === currentUser.id ? 'current-user' : ''}>{user.username}</p>
+				</div>
+			)
+		});
+		
     const hand = this.state.hand.map((card, i) => {
       return (
         <img className="card"
@@ -56,7 +82,14 @@ export default class Game extends React.Component {
     return (
       <div id="game-container">
         <div id="game">
-          <h2>{this.state.count}</h2>
+					<div id="users-container">{users}</div>
+					<div id="game-state">
+						<img className="card" 
+							src={this.state.discard.img} 
+							alt="Discard pile"
+						/>
+						<h2 id="count">{this.state.count}</h2>					
+					</div>
         </div>
 				<div id="hand">
 					{hand}

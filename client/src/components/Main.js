@@ -21,6 +21,8 @@ export default class Main extends React.Component {
     
     const { username, table: room } = qs.parse(window.location.search)
     
+    // Todo => Redirect client to index if there's no qs
+    
     // console.log(username, room)
     socket.emit('joinRoom', { username, room })
     // socket.emit('joinRoom')

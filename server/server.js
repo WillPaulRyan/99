@@ -4,7 +4,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
-const { newGame, deal } = require('./utils/game')
+const { newGame, deal, play } = require('./utils/game')
 
 const app = express();
 const server = http.createServer(app);
@@ -34,7 +34,8 @@ io.on('connection', socket => {
 
   socket.on('joinRoom', ({username, room}) => {
     const user = userJoin(socket.id, username, room);
-
+    
+    socket.emit('currentUser', {id: socket.id, username, room});
     socket.join(user.room);
 
     // Send users and room info
@@ -52,12 +53,13 @@ io.on('connection', socket => {
 
   // Listen for new game
   socket.on('newGameReq', () => {
-    const user = getCurrentUser(socket.id);
-    newGame(io, socket, user)
+    // const user = getCurrentUser(socket.id);
+    newGame(io, socket, getCurrentUser(socket.id))
   })
 
-  // Listen for client request for a card
-  socket.on('dealReq', () => {
+  // Listen for client play
+  socket.on('play', (card) => {
+		play(io, getCurrentUser(socket.id), card);
     deal(socket)
   })
   
@@ -67,7 +69,7 @@ io.on('connection', socket => {
     const user = userLeave(socket.id);
 
     if(user) {
-      io.to(user.room).emit('message', formatMessage(botName, `${user.username} has left the chat`));
+      // io.to(user.room).emit('message', formatMessage(botName, `${user.username} has left the chat`));
 
       // Send users and room info
       io.to(user.room).emit('roomUsers', {
