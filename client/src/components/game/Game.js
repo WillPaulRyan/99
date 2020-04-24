@@ -7,7 +7,7 @@ export default class Game extends React.Component {
     count: 0,
     hand: [],
     users: [],
-    discard: {img: ''}
+    discard: {img: './cards/discard.png'}
   }
 
   componentDidMount() {
@@ -21,7 +21,8 @@ export default class Game extends React.Component {
 			console.log("New game");
 			this.setState((state) => ({
 				count: 0,
-        hand
+        hand,
+        discard: {img: './cards/discard.png'}
 			}))
 		})
     
