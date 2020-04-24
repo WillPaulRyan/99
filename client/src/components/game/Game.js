@@ -11,9 +11,9 @@ export default class Game extends React.Component {
     this.props.socket.emit('newGameReq')
     
     this.props.socket.on('newGame', hand => {
-			console.log(hand);
+			// console.log(hand);
 			this.setState((state) => ({
-        hand: [...state.hand, ...hand]
+        hand: [...hand]
 			}))
 		})
     
@@ -23,6 +23,11 @@ export default class Game extends React.Component {
       }))
 
       // console.log(this.state.hand)
+    })
+
+    this.props.socket.on('roomUsers', ({ room, users }) => {
+      // console.log(room)
+      console.log(users)
     })
   }
 

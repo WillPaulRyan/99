@@ -1,5 +1,6 @@
 const socketio = require('socket.io');
 const {Deck} = require('./Deck');
+const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./users');
 
 function reset() {
 	deck = [...Deck]
