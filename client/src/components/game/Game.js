@@ -7,7 +7,9 @@ export default class Game extends React.Component {
     count: 0,
     hand: [],
     users: [],
-    discard: {img: './cards/discard.png'}
+    discard: {img: './cards/discard.png'},
+    nextTurn: 0,
+    isClockwise: true
   }
 
   componentDidMount() {
@@ -40,7 +42,10 @@ export default class Game extends React.Component {
 			this.setState((state) => ({
 				count: state.count + card.value,
 				discard: card
-			}));
+      }));
+      
+      console.log(this.state.currentUser)
+      console.log(this.state.users)
 		});
 
     this.props.socket.on('roomUsers', ({ room, users }) => {
@@ -49,12 +54,20 @@ export default class Game extends React.Component {
   }
 
   handlePlay = (card) => {
-    this.props.socket.emit('play', card)
-    // console.log(value)
+    console.log(this.state.users)
+    console.log(this.state.nextTurn)
+    console.log(this.state.currentUser)
+    console.log(this.state.users[this.state.nextTurn].id === this.state.currentUser.id)
 
-    this.setState((state) => ({
-      hand: state.hand.filter(word => word.id !== card.id)
-    }));
+
+    if(this.state.users[this.state.nextTurn].id === this.state.currentUser.id) {
+      this.props.socket.emit('play', card)
+      // console.log(value)
+
+      this.setState((state) => ({
+        hand: state.hand.filter(word => word.id !== card.id)
+      }));
+    }
 	}
 
   render() {
