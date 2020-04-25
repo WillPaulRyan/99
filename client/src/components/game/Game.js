@@ -38,14 +38,21 @@ export default class Game extends React.Component {
     
     this.props.socket.on('turnPlayed', ({ user, card }) => {
 			// console.log(card);
-			
-			this.setState((state) => ({
-				count: state.count + card.value,
-				discard: card
-      }));
-      
-      console.log(this.state.currentUser)
-      console.log(this.state.users)
+	
+			// Check this.state.isClockwise
+			if (this.state.isClockwise) {
+				this.setState((state) => ({
+					count: state.count + card.value,
+					discard: card,
+					nextTurn: (state.nextTurn + 1) % state.users.length
+				}));
+			} else {
+				this.setState((state) => ({
+					count: state.count + card.value,
+					discard: card,
+					nextTurn: this.mod((state.nextTurn - 1), state.users.length)
+				}));
+			}				
 		});
 
     this.props.socket.on('roomUsers', ({ room, users }) => {
@@ -54,20 +61,24 @@ export default class Game extends React.Component {
   }
 
   handlePlay = (card) => {
-    console.log(this.state.users)
-    console.log(this.state.nextTurn)
-    console.log(this.state.currentUser)
-    console.log(this.state.users[this.state.nextTurn].id === this.state.currentUser.id)
-
-
+//		console.log(this.state.users);
+//		console.log(this.state.nextTurn);
+//		console.log(this.state.currentUser);
+		
+		// Check if user's turn
     if(this.state.users[this.state.nextTurn].id === this.state.currentUser.id) {
       this.props.socket.emit('play', card)
       // console.log(value)
 
-      this.setState((state) => ({
-        hand: state.hand.filter(word => word.id !== card.id)
-      }));
+			this.setState((state) => ({
+				hand: state.hand.filter(word => word.id !== card.id),
+			}));
     }
+	}
+	
+	// Needed to fix javascript's broken modulo operator
+	mod(n, m) {
+		return ((n % m) + m) % m;
 	}
 
   render() {
@@ -77,7 +88,10 @@ export default class Game extends React.Component {
 			.map((user, i) => {
 			return (
 				<div className="user" key={i}>
-					<p id={user.id === currentUser.id ? 'current-user' : ''}>{user.username}</p>
+					<p 
+						id={user.id === currentUser.id ? 'current-user' : ''}
+						className={this.state.users[this.state.nextTurn].id === user.id ? 'turn' : ''}
+					>{user.username}</p>
 				</div>
 			)
 		});
