@@ -48,18 +48,21 @@ io.on('connection', socket => {
   // Listen for chatMessage
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-    io.to(user.room).emit('message', formatMessage(user.username, msg))
+    io.to(user.room).emit('message', formatMessage('chat', user.username, msg))
   })
 
   // Listen for new game
   socket.on('newGameReq', () => {
-    // const user = getCurrentUser(socket.id);
-    newGame(io, socket, getCurrentUser(socket.id))
+    const user = getCurrentUser(socket.id);
+    newGame(io, socket, user)
+    io.to(user.room).emit('message', formatMessage('server', '', 'New Game'))
   })
 
   // Listen for client play
   socket.on('play', (card) => {
-		play(io, getCurrentUser(socket.id), card);
+    const user = getCurrentUser(socket.id);
+    play(io, user, card);
+    io.to(user.room).emit('message', formatMessage('play', user.username, card));
     deal(socket)
   })
   

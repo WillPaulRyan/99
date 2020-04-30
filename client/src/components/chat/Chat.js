@@ -40,12 +40,27 @@ export default class Chat extends React.Component {
 
   render() {
     const messages = this.state.messages.map((message, i) => {
-      return (
-        <div className="message" key={i}>
-          <p className="meta">{message.username}</p>
-          <p className="text">{message.text}</p>
-        </div>
-      )
+      if (message.type === 'chat') {
+        return (
+          <div className="message chat" key={i}>
+            <p className="meta">{message.username}</p>
+            <p className="text">{message.content}</p>
+          </div>
+        )
+      } else if (message.type === 'play') {
+        return (
+          <div className="message play" key={i}>
+            <p>{message.username} lays <span className={message.content.suit}>{message.content.abbreviation}</span></p>
+          </div>
+        )
+      } else if (message.type === 'server') {
+        return (
+          <div className="message server" key={i}>
+            <p className="text">{message.content}</p>
+          </div>
+        )
+      }
+      return true;
     });
 
     return (

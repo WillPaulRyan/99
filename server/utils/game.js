@@ -9,7 +9,7 @@ function reset() {
 
 function newGame(io, socket, user) {
   reset();
-  console.log(`New game in room ${user.room}`);
+  // console.log(`New game in room ${user.room}`);
     
   // Get users in room & to each user...
   getRoomUsers(user.room).forEach((user) => {

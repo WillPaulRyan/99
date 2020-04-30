@@ -10,7 +10,7 @@ export default class Game extends React.Component {
     discard: {img: './cards/discard.png'},
     nextTurn: 0,
     isClockwise: true
-  }
+	}
 
   componentDidMount() {
     this.props.socket.emit('newGameReq')
@@ -61,6 +61,7 @@ export default class Game extends React.Component {
   }
 
   handlePlay = (card) => {
+		if (this.state.count >= 100) return;
 //		console.log(this.state.users);
 //		console.log(this.state.nextTurn);
 //		console.log(this.state.currentUser);
@@ -90,6 +91,7 @@ export default class Game extends React.Component {
 				<div className="user" key={i}>
 					<p 
 						id={user.id === currentUser.id ? 'current-user' : ''}
+						// BUG on newgame - I think it has to do with nextTurn
 						className={this.state.users[this.state.nextTurn].id === user.id ? 'turn' : ''}
 					>{user.username}</p>
 				</div>
@@ -116,7 +118,7 @@ export default class Game extends React.Component {
 							src={this.state.discard.img} 
 							alt="Discard pile"
 						/>
-						<h2 id="count">{this.state.count}</h2>					
+						<h2 id="count" className={this.state.count >= 100 ? 'game-over' : ''} >{this.state.count}</h2>					
 					</div>
         </div>
 				<div id="hand">
