@@ -65,6 +65,12 @@ io.on('connection', socket => {
     io.to(user.room).emit('message', formatMessage('play', user.username, card));
     deal(socket)
   })
+
+  // Listen for game over
+  socket.on('gameOver', (user) => {
+    // console.log(`Game over: ${user.username}`)
+    io.to(user.room).emit('message', formatMessage('server', '', `${user.username} loses`));
+  })
   
 
   // Runs when client disconnects

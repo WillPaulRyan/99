@@ -37,8 +37,12 @@ export default class Game extends React.Component {
     })
     
     this.props.socket.on('turnPlayed', ({ user, card }) => {
-			// console.log(card);
-	
+			// Check for game over
+			// BUG - Sends GAME OVER message for each user
+			if (this.state.count + card.value >= 100) {
+				this.props.socket.emit('gameOver', user)
+			}
+
 			// Check this.state.isClockwise
 			if (this.state.isClockwise) {
 				this.setState((state) => ({
